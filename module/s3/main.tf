@@ -1,6 +1,6 @@
 # Create an S3 bucket
 resource "aws_s3_bucket" "cbz_bucket" {
-  bucket = "weskill-edtech-project-project-bux" # Replace with a globally unique bucket name
+  bucket = "weskill-edtech-frontend-bux" # Replace with a globally unique bucket name
 
   # Enable static website hosting
   website {
