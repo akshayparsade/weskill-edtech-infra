@@ -13,6 +13,13 @@ provider "aws" {
 
 module "rds" {
     source = "./modules/rds"
+    project = var.eks_project
+    instance_class = var.rds_instance_class
+    allocated_storage = var.rds_allocated_storage
+    max_allocated_storage = var.rds_max_allocated_storage
+    username = var.rds_username
+    password = var.rds_password
+    environment = var.environment
 }
 
 module "eks" {

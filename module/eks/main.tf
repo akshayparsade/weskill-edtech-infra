@@ -1,6 +1,6 @@
 # Create an IAM Role for the EKS Cluster
 resource "aws_iam_role" "eks_cluster_role" {
-  name = "eks-cluster-role-${var.environment}"
+  name = "eks-cluster-role-${var.project}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -62,20 +62,21 @@ resource "aws_iam_role_policy_attachment" "ec2_container_policy" {
 }
 
 # Fetch the Default VPC and Subnets
-data "aws_vpc" "default" {
-  default = true
-}
-
 data "aws_subnets" "default" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
   }
+
+  filter {
+    name   = "availability-zone"
+    values = ["us-east-1a", "us-east-1b", "us-east-1c"] # pick at least two supported AZs
+  }
 }
 
 # Create an EKS Cluster
 resource "aws_eks_cluster" "cbz_cluster" {
-  name     = "${var.project}-cluster-${var.environment}"
+  name     = "${var.project}-cluster-${var.project}"
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {

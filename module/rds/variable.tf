@@ -1,16 +1,7 @@
 
-  variable "instance_type" {
-    default = "db.t3.micro"
-    
-  }
-  variable "username" {
-    default = "admin"   
-  }
+  variable "instance_type" {}
+  variable "username" {}
+  variable "password" {}
+  variable "environment" {}
+  variable "project" {}
   
-  variable "password" {
-    default = "Redhat123"
-  }
-  variable "environment" {
-    default = "dev"
-    
-  }
