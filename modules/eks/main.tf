@@ -61,16 +61,16 @@ resource "aws_iam_role_policy_attachment" "ec2_container_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
-# Fetch the Default VPC and Subnets
+# Fetch the default VPC
+data "aws_vpc" "default" {
+  default = true
+}
+
+# Fetch subnets from default VPC
 data "aws_subnets" "default" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
-  }
-
-  filter {
-    name   = "availability-zone"
-    values = ["us-east-1a", "us-east-1b", "us-east-1c"] # pick at least two supported AZs
   }
 }
 
