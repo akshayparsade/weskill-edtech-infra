@@ -36,11 +36,7 @@ variable "rds_password" {
   sensitive   = true
 }
 
-variable "rds_secret_name" {
-  description = "Secrets Manager secret name or ARN for RDS password"
-  type        = string
-  default     = "rds/dev/password"   # optional default
-}
+
 
 
 # EKS Variables

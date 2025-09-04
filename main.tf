@@ -31,9 +31,9 @@ data "aws_subnets" "default" {
 
 
 # fetch secret by name (we'll make this name configurable)
-data "aws_secretsmanager_secret_version" "rds_password" {
-  secret_id = var.rds_secret_name
-}
+# data "aws_secretsmanager_secret_version" "rds_password" {
+#   secret_id = var.rds_secret_name
+# }
 
 module "rds" {
   source                = "./modules/rds"
@@ -42,9 +42,10 @@ module "rds" {
   allocated_storage     = var.rds_allocated_storage
   max_allocated_storage = var.rds_max_allocated_storage
   username              = var.rds_username
-  password              = data.aws_secretsmanager_secret_version.rds_password.secret_string
+  password              = var.rds_password   # <- pass fixed value
   environment           = var.environment
 }
+
 
 module "eks" {
     source = "./modules/eks"

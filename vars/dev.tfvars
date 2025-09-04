@@ -6,9 +6,10 @@ rds_instance_class        = "db.t3.micro"
 rds_allocated_storage     = 20
 rds_max_allocated_storage = 100
 rds_username              = "admin"
+password                  = "DevPassword123"
 
 # tell Terraform which Secrets Manager secret to use
-rds_secret_name = "rds/dev/password"
+# rds_secret_name = "rds/dev/password"
 
 # EKS Variables
 eks_project            = "weskill"

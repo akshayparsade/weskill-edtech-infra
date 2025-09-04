@@ -35,6 +35,18 @@ resource "aws_security_group" "rds_sg" {
     Name = "rds-sg"
   }
 }
+# Create a secret to store RDS password
+resource "aws_secretsmanager_secret" "rds" {
+  name = "${var.project}-${var.environment}-rds-password"
+}
+
+# Store fixed password in Secrets Manager
+resource "aws_secretsmanager_secret_version" "rds" {
+  secret_id     = aws_secretsmanager_secret.rds.id
+  secret_string = var.password   # <- use DevPassword123
+}
+
+
 
 # Create an RDS MySQL Instance
 resource "aws_db_instance" "cbz_db_instance" {
