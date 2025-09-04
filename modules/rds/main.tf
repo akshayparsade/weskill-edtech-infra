@@ -38,23 +38,25 @@ resource "aws_security_group" "rds_sg" {
 
 # Create an RDS MySQL Instance
 resource "aws_db_instance" "cbz_db_instance" {
-  allocated_storage    = 20
-  max_allocated_storage = 100
-  engine               = "mysql"
-  engine_version       = "8.0"
-  instance_class       = var.instance_type # Free-tier eligible instance type
-  username             = var.username
-  password             = var.password
-  parameter_group_name = "default.mysql8.0"
-  publicly_accessible  = true
+  allocated_storage      = var.allocated_storage
+  max_allocated_storage  = var.max_allocated_storage
+  engine                 = "mysql"
+  engine_version         = "8.0"
+  instance_class         = var.instance_class
+  username               = var.username
+  password               = var.password                # <-- use var.password
+  parameter_group_name   = "default.mysql8.0"
+  publicly_accessible    = true
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
-  db_subnet_group_name = aws_db_subnet_group.default.name
-  skip_final_snapshot  = true
+  db_subnet_group_name   = aws_db_subnet_group.default.name
+  skip_final_snapshot    = true
+
   tags = {
-    Name = "cbz-db-instance"
+    Name        = "cbz-db-instance"
     Environment = var.environment
   }
 }
+
 
 # Create a DB Subnet Group using default subnets
 resource "aws_db_subnet_group" "default" {

@@ -11,19 +11,21 @@ provider "aws" {
     region = var.aws_region
 }
 
+
+# fetch secret by name (we'll make this name configurable)
 data "aws_secretsmanager_secret_version" "rds_password" {
-  secret_id = "rds/dev/password"
+  secret_id = var.rds_secret_name
 }
 
 module "rds" {
-    source = "./modules/rds"
-    project = var.eks_project
-    instance_class = var.rds_instance_class
-    allocated_storage = var.rds_allocated_storage
-    max_allocated_storage = var.rds_max_allocated_storage
-    username = var.rds_username
-    password = data.aws_secretsmanager_secret_version.rds_password.secret_string
-    environment = var.environment
+  source                = "./modules/rds"
+  project               = var.eks_project
+  instance_class        = var.rds_instance_class
+  allocated_storage     = var.rds_allocated_storage
+  max_allocated_storage = var.rds_max_allocated_storage
+  username              = var.rds_username
+  password              = data.aws_secretsmanager_secret_version.rds_password.secret_string
+  environment           = var.environment
 }
 
 module "eks" {
@@ -37,7 +39,7 @@ module "eks" {
 }
 
 module "s3" {
-    source = "./modules/s3"
-    bucket_name = var.s3_bucket_name
-    environment = var.s3_environment
-} 
+  source = "./modules/s3"
+  s3_bucket_name = var.s3_bucket_name
+  environment = var.s3_environment
+}
