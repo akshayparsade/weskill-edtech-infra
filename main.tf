@@ -11,6 +11,24 @@ provider "aws" {
     region = var.aws_region
 }
 
+# Get default VPC
+data "aws_vpc" "default" {
+  default = true
+}
+
+# Get default subnets, but only in supported AZs
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+
+  filter {
+    name   = "availability-zone"
+    values = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  }
+}
+
 
 # fetch secret by name (we'll make this name configurable)
 data "aws_secretsmanager_secret_version" "rds_password" {
@@ -36,6 +54,8 @@ module "eks" {
     min_nodes  = var.eks_min_nodes
     node_instance_type = var.eks_node_instance_type
     environment = var.environment
+    vpc_id     = data.aws_vpc.default.id
+    subnet_ids = data.aws_subnets.default.ids
 }
 
 module "s3" {

@@ -76,18 +76,16 @@ data "aws_subnets" "default" {
 
 # Create an EKS Cluster
 resource "aws_eks_cluster" "cbz_cluster" {
-  name     = "${var.project}-cluster-${var.project}"
+  name     = "${var.project}-cluster-${var.environment}"
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    subnet_ids = data.aws_subnets.default.ids
+    subnet_ids = var.subnet_ids
   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.eks_cluster_policy,
-    aws_iam_role_policy_attachment.eks_service_policy
-  ]
+  depends_on = [aws_iam_role_policy_attachment.eks_cluster_policy]
 }
+
 
 # Create a Node Group
 resource "aws_eks_node_group" "cbz_nodegroup" {
